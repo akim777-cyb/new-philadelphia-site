@@ -14,7 +14,7 @@
    ============================================================ */
 :root{
   --green:#2C4A3E;
-  --green-dark:#1C3329;
+  --green-dark:#26241F;        /* was #1C3329 — now warm charcoal for dark anchor moments (footer, stat cards) */
   --green-tint:#EAF1EB;
   --gold:#B8864C;
   --gold-light:#D9B77C;
@@ -23,6 +23,9 @@
   --cream:#F5EDD8;
   --cream-soft:#FBF6E8;
   --bg-light:#F9F4E6;
+  --surface:#EDEAE1;           /* warm light grey — primary light surface (hero, brand) */
+  --surface-soft:#F4F2EB;      /* slightly lighter — nav bar */
+  --surface-line:rgba(0,0,0,0.08);  /* subtle divider on light surfaces */
   --white:#FFFFFF;
   --ink:#1F1F1F;
   --body:#2C2C2C;
@@ -118,125 +121,175 @@ p:last-child{margin-bottom:0}
 .reveal.is-visible{opacity:1;transform:translateY(0)}
 
 /* ============================================================
-   SCROLL PROGRESS BAR
+   SITE NAVIGATION — TAB BAR
    ============================================================ */
-.progress{
+:root{ --nav-h: 64px; }
+@media (max-width:900px){ :root{ --nav-h: 58px; } }
+
+.site-nav{
   position:fixed;
-  top:0;left:0;
-  height:3px;
-  width:0%;
-  background:var(--gold);
+  top:0;left:0;right:0;
   z-index:200;
-  transition:width 80ms linear;
+  background:rgba(244,242,235,0.92);  /* surface-soft with translucency */
+  border-bottom:1px solid var(--surface-line);
+  height:var(--nav-h);
+  backdrop-filter:saturate(140%) blur(10px);
+  -webkit-backdrop-filter:saturate(140%) blur(10px);
+  box-shadow:0 1px 0 rgba(0,0,0,0.04);
 }
-
-/* ============================================================
-   PRESENTER MODE TOGGLE + COUNTER
-   ============================================================ */
-.presenter-toggle{
-  position:fixed;
-  top:18px;right:18px;
-  z-index:180;
-  background:rgba(28,51,41,0.92);
-  color:var(--gold-light);
-  border:1px solid rgba(184,134,76,0.5);
-  padding:10px 16px;
-  font-family:var(--sans);
-  font-size:11px;
-  font-weight:600;
-  letter-spacing:0.14em;
-  text-transform:uppercase;
-  border-radius:2px;
-  backdrop-filter:blur(8px);
-  -webkit-backdrop-filter:blur(8px);
-  transition:background 200ms, color 200ms, border-color 200ms;
+.site-nav__inner{
+  max-width:1440px;
+  height:100%;
+  margin:0 auto;
+  padding:0 clamp(18px, 4vw, 40px);
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:32px;
 }
-.presenter-toggle:hover{background:var(--green-dark);color:var(--gold)}
-.presenter-toggle:focus-visible{outline:2px solid var(--gold);outline-offset:3px}
-
-.slide-counter{
-  position:fixed;
-  bottom:22px;right:22px;
-  z-index:180;
-  background:rgba(28,51,41,0.92);
-  color:var(--gold-light);
-  padding:8px 14px;
-  font-family:var(--sans);
-  font-size:11px;
-  font-weight:600;
-  letter-spacing:0.14em;
-  border-radius:2px;
-  display:none;
-  backdrop-filter:blur(8px);
-  -webkit-backdrop-filter:blur(8px);
-}
-body.presenter .slide-counter{display:block}
-
-/* Presenter Mode slideshow */
-body.presenter{overflow:hidden;height:100vh}
-body.presenter main{
-  height:100vh;
-  overflow:hidden;
-  scroll-snap-type:y mandatory;
-}
-body.presenter .section{
-  height:100vh;
-  min-height:100vh;
-  padding-top:clamp(40px, 7vh, 80px);
-  padding-bottom:clamp(40px, 7vh, 80px);
-  overflow-y:auto;
-  scroll-snap-align:start;
-  scroll-snap-stop:always;
-}
-body.presenter .dot-nav,
-body.presenter .progress{display:none}
-
-/* ============================================================
-   VERTICAL DOT NAV (desktop)
-   ============================================================ */
-.dot-nav{
-  position:fixed;
-  left:22px;
-  top:50%;
-  transform:translateY(-50%);
-  z-index:150;
-  display:none;
-  flex-direction:column;
+.site-nav__brand{
+  display:flex;
+  align-items:center;
   gap:12px;
-}
-@media (min-width:1100px){.dot-nav{display:flex}}
-.dot-nav__item{
-  position:relative;
-  width:10px;height:10px;
-  border-radius:50%;
-  border:1.5px solid var(--gold);
-  background:transparent;
-  transition:transform 200ms, background 200ms, border-color 200ms;
-}
-.dot-nav__item.is-active{
-  background:var(--gold);
-  transform:scale(1.35);
-}
-.dot-nav__item:hover{background:var(--gold-light);border-color:var(--gold-light)}
-.dot-nav__label{
-  position:absolute;
-  left:22px;
-  top:50%;
-  transform:translateY(-50%);
-  background:var(--green-dark);
-  color:var(--gold-light);
-  padding:5px 10px;
-  font-size:10px;
-  font-weight:600;
-  letter-spacing:0.12em;
-  text-transform:uppercase;
+  color:var(--ink);
+  font-family:var(--serif);
+  font-style:italic;
+  font-weight:700;
+  font-size:clamp(17px, 1.8vw, 20px);
+  letter-spacing:-0.01em;
+  line-height:1;
   white-space:nowrap;
-  border-radius:2px;
-  opacity:0;
-  pointer-events:none;
-  transition:opacity 180ms;
+  transition:color 200ms;
 }
-.dot-nav__item:hover .dot-nav__label{opacity:1}
+.site-nav__brand:hover{color:var(--gold)}
+.site-nav__brand-mark{
+  width:22px;height:22px;
+  border-radius:50%;
+  background:var(--gold);
+  box-shadow:0 0 0 3px rgba(184,134,76,0.18), 0 0 0 5px rgba(184,134,76,0.07);
+  flex-shrink:0;
+}
+.site-nav__tabs{
+  display:flex;
+  align-items:center;
+  gap:2px;
+}
+.tab-link{
+  position:relative;
+  font-family:var(--sans);
+  font-size:11.5px;
+  font-weight:600;
+  letter-spacing:0.16em;
+  text-transform:uppercase;
+  color:var(--muted);
+  padding:22px 14px;
+  transition:color 180ms;
+}
+.tab-link:hover{color:var(--ink)}
+.tab-link.is-active{color:var(--gold)}
+.tab-link.is-active::after{
+  content:"";
+  position:absolute;
+  left:14px;right:14px;
+  bottom:16px;
+  height:2px;
+  background:var(--gold);
+  animation:tabSlide 260ms cubic-bezier(.22,.8,.22,1);
+}
+@keyframes tabSlide{
+  from{transform:scaleX(0);opacity:0}
+  to{transform:scaleX(1);opacity:1}
+}
+
+/* Mobile menu button */
+.site-nav__menu-btn{
+  display:none;
+  align-items:center;
+  gap:10px;
+  color:var(--ink);
+  font-family:var(--sans);
+  font-size:11px;
+  font-weight:600;
+  letter-spacing:0.16em;
+  text-transform:uppercase;
+  padding:10px 14px;
+  border:1px solid rgba(0,0,0,0.18);
+  border-radius:2px;
+  transition:background 180ms, color 180ms, border-color 180ms;
+}
+.site-nav__menu-btn:hover{background:rgba(184,134,76,0.1);color:var(--gold);border-color:var(--gold)}
+.site-nav__menu-icon{
+  display:inline-flex;
+  flex-direction:column;
+  gap:3px;
+  width:16px;
+}
+.site-nav__menu-icon span{
+  display:block;
+  height:1.5px;
+  background:currentColor;
+  border-radius:1px;
+  transition:transform 220ms, opacity 220ms;
+}
+.site-nav.is-open .site-nav__menu-icon span:nth-child(1){transform:translateY(4.5px) rotate(45deg)}
+.site-nav.is-open .site-nav__menu-icon span:nth-child(2){opacity:0}
+.site-nav.is-open .site-nav__menu-icon span:nth-child(3){transform:translateY(-4.5px) rotate(-45deg)}
+
+@media (max-width:900px){
+  .site-nav__menu-btn{display:inline-flex}
+  .site-nav__tabs{
+    position:absolute;
+    top:100%;left:0;right:0;
+    flex-direction:column;
+    align-items:stretch;
+    gap:0;
+    background:var(--surface-soft);
+    border-bottom:1px solid var(--surface-line);
+    padding:8px 0 14px;
+    max-height:0;
+    overflow:hidden;
+    transition:max-height 300ms cubic-bezier(.22,.8,.22,1), padding 220ms;
+    padding-top:0;padding-bottom:0;
+    box-shadow:0 12px 20px rgba(0,0,0,0.08);
+  }
+  .site-nav.is-open .site-nav__tabs{
+    max-height:480px;
+    padding-top:8px;padding-bottom:14px;
+  }
+  .tab-link{
+    padding:14px 24px;
+    font-size:13px;
+    letter-spacing:0.14em;
+  }
+  .tab-link.is-active::after{
+    left:0;right:auto;
+    top:14px;bottom:14px;
+    width:3px;height:auto;
+    animation:none;
+  }
+}
+
+/* ============================================================
+   TAB VISIBILITY
+   ============================================================ */
+main{position:relative}
+main section[data-tab]{display:none}
+main section[data-tab].is-active-tab{display:block;animation:tabFade 380ms cubic-bezier(.22,.8,.22,1)}
+@keyframes tabFade{
+  from{opacity:0;transform:translateY(8px)}
+  to{opacity:1;transform:translateY(0)}
+}
+
+/* Offset first section of each tab for the fixed nav */
+main section[data-tab].is-active-tab:first-of-type,
+main section[data-tab].is-active-tab{scroll-margin-top:calc(var(--nav-h) + 20px)}
+
+/* Hero specific — fill viewport minus nav on Home tab */
+.hero{min-height:calc(100vh - var(--nav-h));padding-top:clamp(80px, 14vh, 140px)}
+
+/* Non-hero tab top padding so content doesn't hide under fixed nav */
+main section[data-tab]:not(.hero){padding-top:calc(var(--pad-y) + var(--nav-h) - 40px)}
+
 
 /* Skip to content */
 .skip{
@@ -259,12 +312,12 @@ body.presenter .progress{display:none}
    ============================================================ */
 .hero{
   min-height:100vh;
-  background:var(--green-dark);
+  background:var(--surface);
   background-image:
-    radial-gradient(ellipse at 30% 20%, rgba(184,134,76,0.08), transparent 55%),
-    radial-gradient(ellipse at 80% 80%, rgba(44,74,62,0.55), transparent 60%),
-    linear-gradient(180deg, #1C3329 0%, #152821 100%);
-  color:var(--cream-soft);
+    radial-gradient(ellipse at 30% 20%, rgba(184,134,76,0.10), transparent 55%),
+    radial-gradient(ellipse at 80% 80%, rgba(109,46,70,0.06), transparent 60%),
+    linear-gradient(180deg, #EDEAE1 0%, #E2DFD3 100%);
+  color:var(--ink);
   display:flex;
   align-items:center;
   padding:120px var(--pad-x) 100px;
@@ -280,11 +333,11 @@ body.presenter .progress{display:none}
 }
 .hero__grain{
   position:absolute;inset:0;
-  opacity:0.04;
+  opacity:0.06;
   pointer-events:none;
-  mix-blend-mode:overlay;
+  mix-blend-mode:multiply;
   background-image:
-    repeating-linear-gradient(0deg, rgba(255,255,255,0.4) 0, rgba(255,255,255,0.4) 1px, transparent 1px, transparent 3px);
+    repeating-linear-gradient(0deg, rgba(0,0,0,0.4) 0, rgba(0,0,0,0.4) 1px, transparent 1px, transparent 3px);
 }
 .hero__inner{
   position:relative;
@@ -293,11 +346,11 @@ body.presenter .progress{display:none}
   margin:0 auto;
   will-change:transform;
 }
-.hero__eyebrow{color:var(--gold-light);margin-bottom:28px}
+.hero__eyebrow{color:var(--gold);margin-bottom:28px}
 .hero h1{
   font-size:clamp(52px, 9vw, 96px);
   font-weight:700;
-  color:var(--cream-soft);
+  color:var(--ink);
   line-height:1.02;
   letter-spacing:-0.025em;
   margin-bottom:10px;
@@ -312,14 +365,14 @@ body.presenter .progress{display:none}
   font-family:var(--serif);
   font-size:clamp(20px, 2.4vw, 28px);
   font-style:italic;
-  color:var(--cream);
+  color:var(--body);
   margin-top:18px;
   font-weight:400;
   line-height:1.35;
 }
 .hero__lead{
   font-size:clamp(15px, 1.3vw, 17px);
-  color:rgba(245,237,216,0.82);
+  color:var(--muted);
   max-width:620px;
   margin-top:32px;
   line-height:1.65;
@@ -330,7 +383,7 @@ body.presenter .progress{display:none}
   font-weight:500;
   letter-spacing:0.14em;
   text-transform:uppercase;
-  color:var(--gold-light);
+  color:var(--gold);
   margin-top:8px;
 }
 .hero__scroll{
@@ -338,22 +391,21 @@ body.presenter .progress{display:none}
   bottom:36px;
   left:50%;
   transform:translateX(-50%);
-  color:var(--gold-light);
-  font-size:10px;
+  color:var(--ink);
+  font-size:11px;
   font-weight:600;
-  letter-spacing:0.24em;
+  letter-spacing:0.22em;
   text-transform:uppercase;
-  display:flex;
-  flex-direction:column;
+  display:inline-flex;
   align-items:center;
-  gap:10px;
-  animation:bob 2.4s ease-in-out infinite;
+  gap:14px;
+  padding:12px 2px;
+  border-bottom:1px solid rgba(0,0,0,0.2);
+  transition:color 220ms, gap 220ms, border-color 220ms;
 }
-.hero__scroll svg{stroke:var(--gold-light)}
-@keyframes bob{
-  0%,100%{transform:translate(-50%,0)}
-  50%{transform:translate(-50%,6px)}
-}
+.hero__scroll:hover{color:var(--gold);gap:20px;border-color:var(--gold)}
+.hero__scroll:focus-visible{outline:2px solid var(--gold);outline-offset:6px;border-radius:2px}
+.hero__scroll svg{stroke:currentColor;flex-shrink:0}
 
 /* ============================================================
    2. FOUNDER
@@ -430,9 +482,7 @@ body.presenter .progress{display:none}
   display:grid;
   grid-template-columns:1fr;
   gap:48px;
-}
-@media (min-width:900px){
-  .town__grid{grid-template-columns:60% 40%;gap:64px}
+  max-width:820px;
 }
 .feature{
   display:grid;
@@ -984,8 +1034,8 @@ body.presenter .progress{display:none}
    9. BRAND PLATFORM
    ============================================================ */
 .brand{
-  background:var(--green-dark);
-  color:var(--cream-soft);
+  background:var(--surface);
+  color:var(--ink);
   position:relative;
   overflow:hidden;
 }
@@ -994,8 +1044,8 @@ body.presenter .progress{display:none}
   position:absolute;
   inset:0;
   background:
-    radial-gradient(ellipse at 20% 30%, rgba(184,134,76,0.08), transparent 55%),
-    radial-gradient(ellipse at 80% 70%, rgba(109,46,70,0.15), transparent 55%);
+    radial-gradient(ellipse at 20% 30%, rgba(184,134,76,0.12), transparent 55%),
+    radial-gradient(ellipse at 80% 70%, rgba(109,46,70,0.08), transparent 55%);
   pointer-events:none;
 }
 .brand__inner{position:relative}
@@ -1004,7 +1054,7 @@ body.presenter .progress{display:none}
   font-style:italic;
   font-weight:700;
   font-size:clamp(48px, 8vw, 92px);
-  color:var(--cream-soft);
+  color:var(--ink);
   line-height:1;
   letter-spacing:-0.025em;
   margin-top:18px;
@@ -1013,7 +1063,7 @@ body.presenter .progress{display:none}
   font-family:var(--serif);
   font-size:clamp(20px, 2.2vw, 26px);
   line-height:1.4;
-  color:var(--cream);
+  color:var(--body);
   max-width:880px;
   margin-top:24px;
   font-weight:400;
@@ -1022,7 +1072,7 @@ body.presenter .progress{display:none}
 .brand__audience-label{
   margin-top:56px;
   margin-bottom:24px;
-  color:var(--gold-light);
+  color:var(--gold);
   font-size:11px;
   letter-spacing:0.18em;
   font-weight:600;
@@ -1034,19 +1084,21 @@ body.presenter .progress{display:none}
   gap:18px;
 }
 @media (min-width:640px){.audience-grid{grid-template-columns:repeat(2,1fr)}}
-@media (min-width:1040px){.audience-grid{grid-template-columns:repeat(4,1fr)}}
+@media (min-width:1040px){.audience-grid{grid-template-columns:repeat(3,1fr)}}
 .audience{
-  background:rgba(28,51,41,0.6);
-  border:1px solid rgba(184,134,76,0.22);
+  background:var(--white);
+  border:1px solid var(--surface-line);
   border-top:3px solid var(--gold);
   border-radius:4px;
   padding:28px 24px;
-  transition:transform 220ms, background 220ms, border-color 220ms;
+  transition:transform 220ms, background 220ms, border-color 220ms, box-shadow 220ms;
+  box-shadow:var(--shadow-sm);
 }
 .audience:hover{
   transform:translateY(-3px);
-  background:rgba(44,74,62,0.7);
-  border-color:rgba(184,134,76,0.5);
+  background:var(--cream-soft);
+  border-color:rgba(184,134,76,0.4);
+  box-shadow:var(--shadow-md);
 }
 .audience__icon{
   width:44px;height:44px;
@@ -1055,15 +1107,16 @@ body.presenter .progress{display:none}
   display:flex;align-items:center;justify-content:center;
   margin-bottom:18px;
   color:var(--gold);
+  background:var(--cream-soft);
 }
 .audience__icon svg{width:22px;height:22px;stroke:var(--gold);stroke-width:1.7}
 .audience h3{
-  color:var(--cream-soft);
+  color:var(--ink);
   font-size:19px;
   margin-bottom:10px;
 }
 .audience p{
-  color:rgba(245,237,216,0.78);
+  color:var(--body);
   font-size:13.5px;
   line-height:1.6;
   margin:0;
@@ -1071,7 +1124,7 @@ body.presenter .progress{display:none}
 .brand__close{
   margin-top:56px;
   padding-top:32px;
-  border-top:1px solid rgba(184,134,76,0.3);
+  border-top:1px solid rgba(0,0,0,0.12);
   font-family:var(--serif);
   font-style:italic;
   font-size:clamp(17px, 1.6vw, 20px);
@@ -1120,6 +1173,7 @@ body.presenter .progress{display:none}
 .phase__year--1{background:var(--green-dark)}
 .phase__year--2{background:var(--gold);color:var(--green-dark)}
 .phase__year--3{background:var(--burgundy)}
+.phase__year--4{background:var(--green)}
 .phase__year-label{
   font-size:11px;
   letter-spacing:0.22em;
@@ -1213,6 +1267,394 @@ body.presenter .progress{display:none}
 .source-group a:hover{border-color:var(--gold)}
 
 /* ============================================================
+   11. MEDIA TAB — archive, plat, gallery, artifacts, voices, lightbox
+   ============================================================ */
+.media{background:var(--white)}
+.media-subhead{
+  font-family:var(--serif);
+  font-size:clamp(26px, 3vw, 34px);
+  font-weight:700;
+  color:var(--ink);
+  margin:8px 0 14px;
+  letter-spacing:-0.012em;
+}
+.media-copy{
+  font-size:16px;
+  color:var(--body);
+  line-height:1.7;
+  max-width:720px;
+  margin-bottom:28px;
+}
+.media-sources{
+  font-size:12px;
+  color:var(--muted);
+  margin-top:18px;
+  line-height:1.6;
+}
+.media-sources a{color:var(--gold);border-bottom:1px solid transparent;transition:border-color 180ms}
+.media-sources a:hover{border-color:var(--gold)}
+
+/* --- Interactive plat --- */
+.plat-wrap{
+  display:grid;
+  grid-template-columns:1fr;
+  gap:24px;
+  margin-top:16px;
+}
+@media (min-width:960px){
+  .plat-wrap{grid-template-columns:1.1fr 1fr;gap:36px;align-items:start}
+}
+.plat-svg{
+  width:100%;
+  height:auto;
+  aspect-ratio:1/1;
+  border:1px solid var(--surface-line);
+  border-radius:4px;
+  box-shadow:var(--shadow);
+  background:#F4F2EB;
+}
+.plat-lot{
+  fill:transparent;
+  stroke:#B8864C;
+  stroke-width:0.5;
+  stroke-opacity:0.35;
+  cursor:default;
+  transition:fill 180ms, stroke-opacity 180ms;
+}
+.plat-lot.is-known{
+  fill:#B8864C;
+  fill-opacity:0.42;
+  stroke-opacity:0.7;
+  cursor:pointer;
+}
+.plat-lot.is-known:hover,
+.plat-lot.is-known:focus{
+  fill-opacity:0.75;
+  stroke:#6D2E46;
+  stroke-width:1.2;
+  outline:none;
+}
+.plat-lot.is-excavated{
+  fill:#6D2E46;
+  fill-opacity:0.82;
+  stroke:#4A1E30;
+  stroke-opacity:0.6;
+  cursor:pointer;
+}
+.plat-lot.is-excavated:hover,
+.plat-lot.is-excavated:focus{
+  fill:#8B3A58;
+  outline:none;
+}
+.plat-lot.is-selected{
+  stroke:#1F1F1F;
+  stroke-width:2;
+  stroke-opacity:1;
+}
+.plat-lot-label{
+  font-family:Inter, sans-serif;
+  font-size:6.5px;
+  fill:#F4F2EB;
+  font-weight:600;
+  pointer-events:none;
+  text-anchor:middle;
+}
+
+.plat-detail{
+  background:var(--cream-soft);
+  border:1px solid var(--surface-line);
+  border-top:3px solid var(--gold);
+  border-radius:4px;
+  padding:28px 28px;
+  min-height:280px;
+  position:sticky;
+  top:calc(var(--nav-h) + 16px);
+  box-shadow:var(--shadow-sm);
+}
+.plat-detail__empty p{
+  margin-top:10px;
+  font-size:14px;
+  color:var(--muted);
+  line-height:1.65;
+}
+.plat-detail__card h4{
+  font-family:var(--serif);
+  font-size:22px;
+  color:var(--ink);
+  margin:8px 0 4px;
+  line-height:1.2;
+}
+.plat-detail__coords{
+  font-family:Inter, sans-serif;
+  font-size:11px;
+  letter-spacing:0.14em;
+  text-transform:uppercase;
+  color:var(--burgundy);
+  font-weight:700;
+  margin-bottom:12px;
+}
+.plat-detail__card p{
+  font-size:14.5px;
+  color:var(--body);
+  line-height:1.7;
+  margin-bottom:12px;
+}
+.plat-detail__tag{
+  display:inline-block;
+  font-family:Inter, sans-serif;
+  font-size:10px;
+  letter-spacing:0.14em;
+  text-transform:uppercase;
+  font-weight:600;
+  padding:5px 10px;
+  border-radius:2px;
+  margin-top:6px;
+}
+.plat-detail__tag--excavated{background:var(--burgundy);color:var(--cream-soft)}
+.plat-detail__tag--known{background:rgba(184,134,76,0.18);color:var(--gold)}
+
+/* --- Photo gallery --- */
+.gallery{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:14px;
+  margin-top:18px;
+}
+@media (min-width:720px){.gallery{grid-template-columns:repeat(3,1fr);gap:18px}}
+.gallery__tile{
+  position:relative;
+  display:block;
+  padding:0;
+  border:1px solid var(--surface-line);
+  border-radius:4px;
+  overflow:hidden;
+  background:var(--surface-soft);
+  cursor:zoom-in;
+  transition:transform 220ms, box-shadow 220ms, border-color 220ms;
+  aspect-ratio:4/3;
+  text-align:left;
+  width:100%;
+}
+.gallery__tile:hover{
+  transform:translateY(-3px);
+  box-shadow:var(--shadow-md);
+  border-color:rgba(184,134,76,0.5);
+}
+.gallery__tile:focus-visible{outline:2px solid var(--gold);outline-offset:3px}
+.gallery__tile img{
+  width:100%;height:100%;
+  object-fit:cover;
+  display:block;
+  transition:transform 500ms cubic-bezier(.22,.8,.22,1), opacity 220ms;
+}
+.gallery__tile:hover img{transform:scale(1.04)}
+.gallery__caption{
+  position:absolute;
+  left:0;right:0;bottom:0;
+  padding:14px 14px 12px;
+  background:linear-gradient(180deg, transparent 0%, rgba(38,36,31,0.86) 100%);
+  color:var(--cream-soft);
+}
+.gallery__label{
+  display:block;
+  font-family:var(--serif);
+  font-size:15px;
+  font-weight:700;
+  font-style:italic;
+  line-height:1.2;
+  color:var(--cream-soft);
+}
+.gallery__meta{
+  display:block;
+  font-family:Inter, sans-serif;
+  font-size:10.5px;
+  letter-spacing:0.12em;
+  text-transform:uppercase;
+  color:var(--gold-light);
+  margin-top:5px;
+}
+
+/* --- Lightbox --- */
+.lightbox{
+  position:fixed;
+  inset:0;
+  z-index:400;
+  background:rgba(20,18,14,0.94);
+  display:none;
+  align-items:center;
+  justify-content:center;
+  padding:clamp(20px, 4vw, 60px);
+  animation:lbFade 200ms ease;
+}
+.lightbox[data-open="true"]{display:flex}
+@keyframes lbFade{from{opacity:0} to{opacity:1}}
+.lightbox__figure{
+  max-width:min(1200px, 94vw);
+  max-height:86vh;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:14px;
+}
+.lightbox__figure img{
+  max-width:100%;
+  max-height:76vh;
+  object-fit:contain;
+  border-radius:2px;
+  box-shadow:0 18px 48px rgba(0,0,0,0.6);
+}
+.lightbox__figure figcaption{
+  color:var(--cream-soft);
+  font-family:Inter, sans-serif;
+  font-size:13.5px;
+  letter-spacing:0.04em;
+  text-align:center;
+  max-width:640px;
+  line-height:1.5;
+}
+.lightbox__figure figcaption strong{
+  display:block;
+  font-family:var(--serif);
+  font-style:italic;
+  font-size:17px;
+  font-weight:700;
+  color:var(--gold-light);
+  margin-bottom:6px;
+  font-style:italic;
+}
+.lightbox__close,
+.lightbox__nav{
+  position:absolute;
+  background:rgba(184,134,76,0.15);
+  border:1px solid rgba(184,134,76,0.4);
+  color:var(--cream-soft);
+  width:44px;height:44px;
+  display:flex;align-items:center;justify-content:center;
+  border-radius:50%;
+  cursor:pointer;
+  transition:background 180ms, border-color 180ms, transform 180ms;
+}
+.lightbox__close:hover,
+.lightbox__nav:hover{
+  background:var(--gold);
+  border-color:var(--gold);
+  color:var(--green-dark);
+}
+.lightbox__close{top:22px;right:22px}
+.lightbox__nav--prev{left:22px;top:50%;transform:translateY(-50%)}
+.lightbox__nav--next{right:22px;top:50%;transform:translateY(-50%)}
+.lightbox__nav--prev:hover{transform:translateY(-50%) translateX(-2px)}
+.lightbox__nav--next:hover{transform:translateY(-50%) translateX(2px)}
+@media (max-width:640px){
+  .lightbox__close{top:14px;right:14px}
+  .lightbox__nav{width:38px;height:38px}
+  .lightbox__nav--prev{left:10px}
+  .lightbox__nav--next{right:10px}
+}
+
+/* --- Artifact cabinet --- */
+.artifact-grid{
+  display:grid;
+  grid-template-columns:1fr;
+  gap:18px;
+  margin-top:18px;
+}
+@media (min-width:640px){.artifact-grid{grid-template-columns:repeat(2,1fr)}}
+@media (min-width:1000px){.artifact-grid{grid-template-columns:repeat(3,1fr)}}
+.artifact{
+  background:var(--cream-soft);
+  border:1px solid var(--surface-line);
+  border-top:3px solid var(--burgundy);
+  border-radius:4px;
+  padding:28px 24px;
+  transition:transform 220ms, box-shadow 220ms;
+  box-shadow:var(--shadow-sm);
+}
+.artifact:hover{transform:translateY(-3px);box-shadow:var(--shadow-md)}
+.artifact__icon{
+  width:56px;height:56px;
+  border:1.3px solid var(--burgundy);
+  border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  color:var(--burgundy);
+  margin-bottom:18px;
+  background:var(--white);
+}
+.artifact__icon svg{width:32px;height:32px}
+.artifact h4{
+  font-family:var(--serif);
+  font-size:19px;
+  font-weight:700;
+  color:var(--ink);
+  margin-bottom:10px;
+  line-height:1.2;
+}
+.artifact p{
+  font-size:14px;
+  color:var(--body);
+  line-height:1.65;
+  margin:0;
+}
+
+/* --- Voices wall --- */
+.voices{
+  display:grid;
+  grid-template-columns:1fr;
+  gap:20px;
+  margin-top:18px;
+}
+@media (min-width:840px){.voices{grid-template-columns:repeat(2,1fr);gap:24px}}
+.voice{
+  background:var(--cream-soft);
+  border-left:3px solid var(--gold);
+  padding:28px 30px 24px;
+  border-radius:0 4px 4px 0;
+  transition:transform 220ms, box-shadow 220ms;
+  box-shadow:var(--shadow-sm);
+  position:relative;
+}
+.voice:hover{transform:translateY(-2px);box-shadow:var(--shadow-md)}
+.voice::before{
+  content:"\201C";
+  position:absolute;
+  top:-4px;left:18px;
+  font-family:var(--serif);
+  font-size:64px;
+  color:var(--gold);
+  line-height:1;
+  opacity:0.35;
+}
+.voice p{
+  font-family:var(--serif);
+  font-style:italic;
+  font-size:clamp(16px, 1.6vw, 19px);
+  line-height:1.55;
+  color:var(--ink);
+  margin:0 0 18px;
+}
+.voice footer{
+  display:flex;
+  flex-direction:column;
+  gap:3px;
+  padding-top:14px;
+  border-top:1px solid rgba(184,134,76,0.3);
+}
+.voice footer strong{
+  font-family:Inter, sans-serif;
+  font-size:13px;
+  font-weight:700;
+  color:var(--green-dark);
+  letter-spacing:0.01em;
+}
+.voice footer span{
+  font-family:Inter, sans-serif;
+  font-size:11.5px;
+  color:var(--muted);
+  letter-spacing:0.02em;
+  line-height:1.45;
+}
+
+/* ============================================================
    12. FOOTER
    ============================================================ */
 .footer{
@@ -1230,6 +1672,17 @@ body.presenter .progress{display:none}
   background:linear-gradient(90deg, transparent, var(--gold), transparent);
 }
 .footer__inner{max-width:var(--max);margin:0 auto}
+.footer__brand-block{
+  padding-bottom:32px;
+  border-bottom:1px solid rgba(184,134,76,0.2);
+  max-width:640px;
+}
+.footer__tagline{
+  margin-top:18px;
+  font-size:13.5px;
+  color:rgba(245,237,216,0.72);
+  line-height:1.7;
+}
 .footer__grid{
   display:grid;
   grid-template-columns:1fr;
@@ -1319,27 +1772,37 @@ body.presenter .progress{display:none}
 </head>
 <body>
 
-<a href="#hero" class="skip">Skip to content</a>
+<a href="#home" class="skip">Skip to content</a>
 
-<div class="progress" id="progress" aria-hidden="true"></div>
+<header class="site-nav" id="siteNav">
+  <div class="site-nav__inner">
+    <a href="#home" class="site-nav__brand" data-tab-link="home">
+      <span class="site-nav__brand-mark" aria-hidden="true"></span>
+      <span>The Free Frontier</span>
+    </a>
+    <button class="site-nav__menu-btn" id="menuBtn" aria-expanded="false" aria-controls="primaryTabs" aria-label="Toggle navigation">
+      <span class="site-nav__menu-icon" aria-hidden="true"><span></span><span></span><span></span></span>
+      <span class="site-nav__menu-label">Menu</span>
+    </button>
+    <nav class="site-nav__tabs" id="primaryTabs" aria-label="Primary">
+      <a href="#home"    data-tab-link="home"    class="tab-link">Home</a>
+      <a href="#thesis"  data-tab-link="thesis"  class="tab-link">Thesis</a>
+      <a href="#swot"    data-tab-link="swot"    class="tab-link">SWOT</a>
+      <a href="#media"   data-tab-link="media"   class="tab-link">Media</a>
+    </nav>
+  </div>
+</header>
 
-<button class="presenter-toggle" id="presenterToggle" aria-pressed="false">
-  Presenter Mode
-</button>
-<div class="slide-counter" id="slideCounter">1 / 12</div>
-
-<nav class="dot-nav" id="dotNav" aria-label="Section navigation"></nav>
-
-<main id="main">
+<main id="main" data-active-tab="home">
 
 <!-- ============================================================
      1. HERO
      ============================================================ -->
-<section class="section hero" id="hero" data-label="Intro" aria-labelledby="hero-title">
+<section class="section hero" id="home" data-tab="home" aria-labelledby="hero-title">
   <div class="hero__grain" aria-hidden="true"></div>
   <div class="hero__inner" id="heroInner">
     <div class="eyebrow eyebrow--light hero__eyebrow reveal">
-      Ghost Town Repositioning · Real Estate Media &amp; Marketing · Spring 2026
+      Pike County, Illinois · The Free Frontier Initiative
     </div>
     <h1 id="hero-title" class="reveal">
       New Philadelphia,
@@ -1348,20 +1811,19 @@ body.presenter .progress{display:none}
     <p class="hero__subhead reveal">Repositioning America's First Black-Founded Town</p>
     <p class="hero__lead reveal">A Pike County market thesis at the intersection of outdoor recreation, American history, and rural affordability.</p>
     <hr class="divider-gold reveal">
-    <p class="hero__credit reveal">Columbia GSAPP · Master of Science in Real Estate Development</p>
   </div>
-  <div class="hero__scroll" aria-hidden="true">
-    <span>Scroll</span>
-    <svg width="14" height="20" viewBox="0 0 14 20" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-      <path d="M7 2 L7 14 M2 10 L7 15 L12 10"/>
+  <a href="#founder" class="hero__scroll">
+    <span>Begin the story</span>
+    <svg width="18" height="14" viewBox="0 0 24 18" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M2 9 L20 9 M14 3 L20 9 L14 15"/>
     </svg>
-  </div>
+  </a>
 </section>
 
 <!-- ============================================================
      2. FOUNDER
      ============================================================ -->
-<section class="section founder" id="founder" data-label="The Founder" aria-labelledby="founder-title">
+<section class="section founder" id="founder" data-tab="home" aria-labelledby="founder-title">
   <div class="section__inner">
     <div class="founder__grid">
       <div class="founder__body">
@@ -1402,7 +1864,7 @@ body.presenter .progress{display:none}
 <!-- ============================================================
      3. TOWN (RISE)
      ============================================================ -->
-<section class="section town" id="town" data-label="The Town" aria-labelledby="town-title">
+<section class="section town" id="town" data-tab="home" aria-labelledby="town-title">
   <div class="section__inner">
     <div class="reveal" style="margin-bottom:48px;max-width:820px">
       <span class="eyebrow">Background · Rise</span>
@@ -1421,7 +1883,7 @@ body.presenter .progress{display:none}
           </div>
           <div>
             <h3>Integrated from the start</h3>
-            <p>Black and white families lived, worshipped, and ran businesses side-by-side decades before the Civil War — with a 30% Black population at peak and no recorded history of racial violence.</p>
+            <p>Black and white families lived, worshipped, and ran businesses side by side decades before the Civil War, with a 30 percent Black population at peak and no recorded history of racial violence.</p>
           </div>
         </div>
         <div class="feature reveal">
@@ -1434,7 +1896,7 @@ body.presenter .progress{display:none}
           </div>
           <div>
             <h3>A working frontier economy</h3>
-            <p>General store, blacksmith, schoolhouse, church, stagecoach stop, and tradespeople — farmers, shoemakers, wheelwrights, merchants, cabinet makers, and a preacher.</p>
+            <p>The town supported a general store, blacksmith, schoolhouse, church, and stagecoach stop, with tradespeople including farmers, shoemakers, wheelwrights, merchants, cabinet makers, and a preacher.</p>
           </div>
         </div>
         <div class="feature reveal">
@@ -1448,17 +1910,10 @@ body.presenter .progress{display:none}
           </div>
           <div>
             <h3>Underground Railroad station</h3>
-            <p>Frank harbored freedom-seekers; his sons guided groups north to Canada. Escapees from Missouri were known to swim the Mississippi to reach New Philadelphia.</p>
+            <p>Frank harbored freedom seekers and his sons guided groups north to Canada, with escapees from Missouri known to swim the Mississippi to reach New Philadelphia.</p>
           </div>
         </div>
       </div>
-      <aside class="peak-card reveal">
-        <div class="peak-card__eyebrow">Peak Population</div>
-        <div class="peak-card__number" data-count="160" data-format="int">160</div>
-        <div class="peak-card__cap">residents in 1865</div>
-        <hr class="divider-gold divider-gold--sm" style="background:rgba(184,134,76,0.6)">
-        <p class="peak-card__text">A third Black, two-thirds white. An integrated frontier community — just 25 miles from the slave-trading post in Hannibal, Missouri.</p>
-      </aside>
     </div>
   </div>
 </section>
@@ -1466,7 +1921,7 @@ body.presenter .progress{display:none}
 <!-- ============================================================
      4. DECLINE — TIMELINE
      ============================================================ -->
-<section class="section decline" id="decline" data-label="The Decline" aria-labelledby="decline-title">
+<section class="section decline" id="decline" data-tab="home" aria-labelledby="decline-title">
   <div class="section__inner">
     <div class="reveal section__header">
       <span class="eyebrow">Background · Decline</span>
@@ -1544,13 +1999,13 @@ body.presenter .progress{display:none}
 <!-- ============================================================
      5. RESURGENCE
      ============================================================ -->
-<section class="section resurgence" id="resurgence" data-label="Resurgence" aria-labelledby="resurgence-title">
+<section class="section resurgence" id="resurgence" data-tab="home" aria-labelledby="resurgence-title">
   <div class="section__inner">
     <div class="reveal section__header">
       <span class="eyebrow">Background · Resurgence</span>
       <h2 id="resurgence-title">From Ghost Town to National Park</h2>
       <hr class="divider-gold divider-gold--sm">
-      <p class="section__lead">Over two decades, academic researchers, descendants, and local preservationists built the evidentiary case that elevated New Philadelphia to the highest tier of federal historic recognition.</p>
+      <p class="section__lead">It took two decades of work by researchers, descendants, and local preservationists to build the case for New Philadelphia's place in the national historical record.</p>
     </div>
 
     <div class="milestones">
@@ -1600,7 +2055,7 @@ body.presenter .progress{display:none}
 <!-- ============================================================
      6. REGIONAL CONTEXT — MAP
      ============================================================ -->
-<section class="section region" id="region" data-label="Region" aria-labelledby="region-title">
+<section class="section region" id="region" data-tab="home" aria-labelledby="region-title">
   <div class="section__inner">
     <div class="reveal section__header">
       <span class="eyebrow">Regional Context</span>
@@ -1704,11 +2159,6 @@ body.presenter .progress{display:none}
           </g>
         </svg>
 
-        <div class="map-legend">
-          <span><span class="legend-dot legend-dot--burgundy"></span>Heritage anchor</span>
-          <span><span class="legend-dot legend-dot--green"></span>Regional market center</span>
-          <span><span class="legend-dot" style="background:#B8864C"></span>Pike County · NHS</span>
-        </div>
       </div>
 
       <div class="reveal">
@@ -1740,13 +2190,13 @@ body.presenter .progress{display:none}
 <!-- ============================================================
      7. THESIS — PILLARS
      ============================================================ -->
-<section class="section thesis" id="thesis" data-label="The Thesis" aria-labelledby="thesis-title">
+<section class="section thesis" id="thesis" data-tab="thesis" aria-labelledby="thesis-title">
   <div class="section__inner">
     <div class="reveal section__header">
       <span class="eyebrow">Positioning</span>
       <h2 id="thesis-title">The Thesis</h2>
       <hr class="divider-gold divider-gold--sm">
-      <p class="section__lead">Pike County is an undervalued market positioned at the intersection of outdoor recreation, American history, and rural affordability — and New Philadelphia's new National Park status is the catalyst to unlock it.</p>
+      <p class="section__lead">Pike County is an undervalued market positioned at the intersection of outdoor recreation, American history, and rural affordability. New Philadelphia's new National Park status is the catalyst to unlock it.</p>
     </div>
 
     <div class="pillars">
@@ -1869,7 +2319,7 @@ body.presenter .progress{display:none}
 <!-- ============================================================
      8. SWOT
      ============================================================ -->
-<section class="section swot" id="swot" data-label="SWOT" aria-labelledby="swot-title">
+<section class="section swot" id="swot" data-tab="swot" aria-labelledby="swot-title">
   <div class="section__inner">
     <div class="reveal section__header">
       <span class="eyebrow">Analysis</span>
@@ -1921,7 +2371,7 @@ body.presenter .progress{display:none}
 <!-- ============================================================
      9. BRAND PLATFORM
      ============================================================ -->
-<section class="section brand" id="brand" data-label="Brand Platform" aria-labelledby="brand-title">
+<section class="section brand" id="brand" data-tab="thesis" aria-labelledby="brand-title">
   <div class="section__inner brand__inner">
     <div class="reveal">
       <span class="eyebrow eyebrow--light">Positioning · Brand Platform</span>
@@ -1966,173 +2416,397 @@ body.presenter .progress{display:none}
         <h3>The Rural Remote Worker</h3>
         <p>Chicago/St. Louis expatriates seeking affordable land, open space, and authentic community.</p>
       </article>
-      <article class="audience reveal">
-        <div class="audience__icon" aria-hidden="true">
-          <svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M4 4 L4 20 L11 17 L18 20 L18 4 L11 7 L4 4 Z"/>
-            <path d="M11 7 L11 17"/>
-          </svg>
-        </div>
-        <h3>The Educator &amp; Scholar</h3>
-        <p>K-12, university, and genealogy audiences — anchored by existing partnerships with U. of I. and U. of Maryland.</p>
-      </article>
     </div>
 
-    <p class="brand__close reveal">A single brand platform that speaks to all four audiences through one continuous story — freedom, land, and legacy.</p>
+    <p class="brand__close reveal">A single brand platform that speaks to all three audiences through one continuous story — freedom, land, and legacy.</p>
   </div>
 </section>
 
 <!-- ============================================================
-     10. ROADMAP
+     10. ROADMAP (10-YEAR)
      ============================================================ -->
-<section class="section roadmap" id="roadmap" data-label="Roadmap" aria-labelledby="roadmap-title">
+<section class="section roadmap" id="roadmap" data-tab="thesis" aria-labelledby="roadmap-title">
   <div class="section__inner">
     <div class="reveal section__header">
       <span class="eyebrow">Execution</span>
-      <h2 id="roadmap-title">Three-Year Implementation Roadmap</h2>
+      <h2 id="roadmap-title">Ten-Year Implementation Roadmap</h2>
       <hr class="divider-gold divider-gold--sm">
+      <p class="section__lead">Four phases across a decade — from brand foundation through DMO self-sufficiency. Sequenced to match the NPS master-planning calendar, Free Frank's bicentennial milestones, and the Pike County budget cycle.</p>
     </div>
 
     <div class="phases">
       <article class="phase reveal">
         <div class="phase__year phase__year--1">
-          <div class="phase__year-label">Year 1</div>
-          <div class="phase__year-num">01</div>
+          <div class="phase__year-label">Phase 01 · Year 1</div>
+          <div class="phase__year-num">'26</div>
           <div class="phase__year-stage">Foundation</div>
         </div>
         <div class="phase__content">
           <ul>
-            <li>Stand up 'Free Frontier' brand + website + social — launch with Black History Month earned-media push.</li>
+            <li>Stand up 'Free Frontier' brand + website + social — launch around Black History Month earned-media push.</li>
             <li>Convene outfitter + NPS + county EDC coalition. Formalize Pike County DMO structure and governance.</li>
-            <li>Complete visitor center feasibility study for Barry. Identify heritage-district restoration candidates.</li>
+            <li>Complete visitor-center feasibility study for Barry; identify heritage-district restoration candidates.</li>
+            <li>Baseline visitor, tourism-spend, and demographic data locked in for Year-10 measurement.</li>
           </ul>
         </div>
       </article>
 
       <article class="phase reveal">
         <div class="phase__year phase__year--2">
-          <div class="phase__year-label">Year 2</div>
-          <div class="phase__year-num">02</div>
+          <div class="phase__year-label">Phase 02 · Years 2–3</div>
+          <div class="phase__year-num">'27–'28</div>
           <div class="phase__year-stage">Activation</div>
         </div>
         <div class="phase__content">
           <ul>
-            <li>Launch Free Frontier Trail (co-marketed with Hannibal + Springfield). First annual McWorter Heritage Festival.</li>
-            <li>Incentive program: heritage-home downpayment assistance + remote-worker tax credits rolled out.</li>
-            <li>Major earned-media push around NPS 425th national park anniversary coverage.</li>
+            <li>Launch Free Frontier Trail co-marketed with Hannibal and Springfield tourism bureaus. First annual McWorter Heritage Festival staged in Barry.</li>
+            <li>Incentive program rolled out: heritage-home downpayment assistance + remote-worker tax credits, targeted at Chicago and St. Louis feeder markets.</li>
+            <li>Extend hunting season with waterfowl, turkey, and upland-bird programming. Outfitter consortium booking portal goes live.</li>
+            <li>Major earned-media push around NPS 425th anniversary coverage. First descendant-led interpretive programming pilots.</li>
           </ul>
         </div>
       </article>
 
       <article class="phase reveal">
         <div class="phase__year phase__year--3">
-          <div class="phase__year-label">Year 3</div>
-          <div class="phase__year-num">03</div>
+          <div class="phase__year-label">Phase 03 · Years 4–6</div>
+          <div class="phase__year-num">'29–'31</div>
           <div class="phase__year-stage">Scale</div>
         </div>
         <div class="phase__content">
           <ul>
-            <li>Open visitor center in Barry. Expanded outfitter consortium booking portal.</li>
-            <li>Measured lift in county visitation, tourism spend, and new-resident acquisitions tracked against baseline.</li>
-            <li>Institutional research conference hosted annually — University of Illinois + NMAAHC partners.</li>
+            <li>Barry visitor center opens; NPS permanent on-site staffing in place. Interpretive plan executed with Smithsonian NMAAHC partnership.</li>
+            <li>Heritage Main Street restoration underway. First mid-scale lodge/B&amp;B private investment closes on a restored property.</li>
+            <li>Annual academic research conference hosted with University of Illinois and University of Maryland co-sponsorship.</li>
+            <li>Regional corridor expansion: Adams and Hancock counties join Pike under a unified western-Illinois heritage brand umbrella.</li>
+            <li>First measurable lift vs. baseline: target +25% county visitation, +15% tourism spend, net-positive migration to Barry.</li>
+          </ul>
+        </div>
+      </article>
+
+      <article class="phase reveal">
+        <div class="phase__year phase__year--4">
+          <div class="phase__year-label">Phase 04 · Years 7–10</div>
+          <div class="phase__year-num">'32–'35</div>
+          <div class="phase__year-stage">Legacy</div>
+        </div>
+        <div class="phase__content">
+          <ul>
+            <li>Pike County DMO reaches financial self-sufficiency through tourism-revenue share and heritage-property assessments.</li>
+            <li>New Philadelphia enters the top quartile of NPS historic-site visitation; institutional traffic from K-12 and university field programs normalized.</li>
+            <li>Barry heritage district fully restored; second lodge or boutique-hospitality asset stabilized. Permanent McWorter descendant advisory board seated.</li>
+            <li>Bicentennial planning kicks off for 2036 — 200 years since the platting — positioning New Philadelphia for a national-scale commemorative moment.</li>
+            <li>Target: +75% county tourism spend vs. 2026 baseline, Barry population inflection positive, Pike County established as a reference case for rural heritage-led economic development.</li>
           </ul>
         </div>
       </article>
     </div>
-
-    <div class="kpi-strip reveal">
-      <strong>Success metrics (Year 3):</strong>
-      Visitor count · County tourism spend vs. baseline · Barry population growth · Earned media impressions · New homebuyer transactions
-    </div>
   </div>
 </section>
 
 <!-- ============================================================
-     11. SOURCES
+     11. MEDIA
      ============================================================ -->
-<section class="section sources" id="sources" data-label="Sources" aria-labelledby="sources-title">
+<section class="section media" id="media" data-tab="media" aria-labelledby="media-title">
   <div class="section__inner">
     <div class="reveal section__header">
-      <span class="eyebrow">References</span>
-      <h2 id="sources-title">Sources &amp; References</h2>
+      <span class="eyebrow">Archive · Media</span>
+      <h2 id="media-title">The Archive</h2>
       <hr class="divider-gold divider-gold--sm">
+      <p class="section__lead">Nothing stands above ground at New Philadelphia. The townsite is an open field. What remains is the record — the 1836 plat, the artifacts turned up by two decades of archaeological survey, the photograph, the living voice of descendants. This is where the town lives now.</p>
     </div>
 
-    <div class="sources__grid reveal">
-      <div class="source-group">
-        <h4>Historical Record</h4>
-        <ul>
-          <li>Walker, Juliet E. K. (1983). <em>Free Frank: A Black Pioneer on the Antebellum Frontier.</em> University Press of Kentucky.</li>
-          <li>Matteson, Grace E. (1964). <em>"Free Frank" McWorter and the "Ghost Town" of New Philadelphia, Pike County, Illinois.</em></li>
-          <li>Shackel, P., and Fennell, C. — multi-year archaeological investigations, Universities of Maryland and Illinois.</li>
-        </ul>
-      </div>
+    <!-- Interactive 1836 plat -->
+    <div class="reveal" style="margin-top:48px">
+      <span class="eyebrow eyebrow--burgundy">Cartography · 1836</span>
+      <h3 class="media-subhead">The Original Plat</h3>
+      <p class="media-copy">Frank McWorter platted the town in a 12 × 12 grid — 144 quarter-acre lots across 42 acres, crisscrossed by 22 named streets. Lots were sold to Black and white families alike. By 2006 the archaeological team had surveyed 14 of the 144 lots. Click a highlighted lot to read what the dig turned up.</p>
 
-      <div class="source-group">
-        <h4>Federal Designations &amp; NPS</h4>
-        <ul>
-          <li>National Park Service, New Philadelphia National Historic Site — <a href="https://www.nps.gov/neph">nps.gov/neph</a></li>
-          <li>NPS, "Teaching with Historic Places: New Philadelphia — A Multiracial Town on the Illinois Frontier."</li>
-          <li>Consolidated Appropriations Act of 2023 — est. New Philadelphia NHS, Dec. 29, 2022, 124.33 acres.</li>
-          <li>National Historic Landmark designation, 2009; National Register of Historic Places, 2005.</li>
-        </ul>
-      </div>
+      <div class="plat-wrap">
+        <svg class="plat-svg" viewBox="0 0 720 720" role="img" aria-label="Interactive reconstruction of the 1836 New Philadelphia town plat, 12 by 12 grid of 144 lots.">
+          <!-- Background paper texture -->
+          <rect x="0" y="0" width="720" height="720" fill="#F4F2EB"/>
+          <rect x="8" y="8" width="704" height="704" fill="none" stroke="#B8864C" stroke-width="1" stroke-opacity="0.3"/>
 
-      <div class="source-group">
-        <h4>Demographic &amp; Economic Data</h4>
-        <ul>
-          <li>U.S. Census Bureau, ACS 5-Year Estimates (2019–2023) — Pike County, IL and Barry, IL.</li>
-          <li>U.S. Census Bureau QuickFacts, Pike County, Illinois.</li>
-          <li>World Population Review (2026) — Barry and Pike County projections.</li>
-        </ul>
-      </div>
+          <!-- Compass + north marker -->
+          <g transform="translate(660, 58)" opacity="0.55">
+            <circle r="18" fill="none" stroke="#B8864C" stroke-width="1"/>
+            <path d="M 0 -14 L 3 0 L 0 14 L -3 0 Z" fill="#B8864C"/>
+            <text x="0" y="-22" text-anchor="middle" font-family="Inter, sans-serif" font-size="8" font-weight="700" fill="#2C4A3E">N</text>
+          </g>
 
-      <div class="source-group">
-        <h4>Tourism &amp; Outdoor Economy</h4>
-        <ul>
-          <li>Tourism Economics / SeeQuincy (2024) — Adams, Pike, Hancock 2023 Tourism Impact ($202.3M).</li>
-          <li>Illinois Dept. of Natural Resources, White-Tailed Deer Summary, Pike County (2022–2023).</li>
-          <li>Illinois Office of Tourism, Economic Impact of Domestic Travel by County.</li>
-        </ul>
-      </div>
+          <!-- Title cartouche -->
+          <g transform="translate(60, 58)">
+            <text x="0" y="0" font-family="Playfair Display, Georgia, serif" font-style="italic" font-size="18" fill="#1F1F1F">Plat of New Philadelphia</text>
+            <text x="0" y="18" font-family="Inter, sans-serif" font-size="9" letter-spacing="1.5" fill="#6B6B6B">PIKE COUNTY, ILLINOIS · 1836 · 144 LOTS · 42 ACRES</text>
+          </g>
 
-      <div class="source-group" style="grid-column:1/-1">
-        <h4>Institutional Partners (Referenced)</h4>
-        <ul>
-          <li>Smithsonian National Museum of American History — "The Migration of Free Frank McWorter."</li>
-          <li>New Philadelphia Association; Free Frank &amp; Free Lucy Heritage Corp.; McWorter Family Archives.</li>
-        </ul>
+          <!-- 12x12 lot grid generated inline -->
+          <!-- Grid region: x 120→600, y 120→600 (480px square, 12 cells of 40px) -->
+          <g id="platGrid"></g>
+
+          <!-- Street labels (a selection of 22) -->
+          <text x="360" y="115" text-anchor="middle" font-family="Inter, sans-serif" font-size="8.5" letter-spacing="1.8" fill="#6B6B6B">BROAD STREET</text>
+          <text x="360" y="615" text-anchor="middle" font-family="Inter, sans-serif" font-size="8.5" letter-spacing="1.8" fill="#6B6B6B">MAIN STREET</text>
+          <text x="115" y="360" text-anchor="middle" font-family="Inter, sans-serif" font-size="8.5" letter-spacing="1.8" fill="#6B6B6B" transform="rotate(-90 115 360)">ANN STREET</text>
+          <text x="605" y="360" text-anchor="middle" font-family="Inter, sans-serif" font-size="8.5" letter-spacing="1.8" fill="#6B6B6B" transform="rotate(-90 605 360)">FRANKLIN ST.</text>
+
+          <!-- Legend -->
+          <g transform="translate(60, 660)">
+            <rect x="0" y="0" width="14" height="14" fill="#6D2E46" opacity="0.85"/>
+            <text x="22" y="11" font-family="Inter, sans-serif" font-size="10" fill="#1F1F1F" letter-spacing="0.5">Documented / excavated</text>
+            <rect x="200" y="0" width="14" height="14" fill="#B8864C" opacity="0.55"/>
+            <text x="222" y="11" font-family="Inter, sans-serif" font-size="10" fill="#1F1F1F" letter-spacing="0.5">Known site</text>
+            <rect x="340" y="0" width="14" height="14" fill="none" stroke="#B8864C" stroke-width="1"/>
+            <text x="362" y="11" font-family="Inter, sans-serif" font-size="10" fill="#6B6B6B" letter-spacing="0.5">Unexcavated</text>
+          </g>
+        </svg>
+
+        <div class="plat-detail" id="platDetail" aria-live="polite">
+          <div class="plat-detail__empty">
+            <span class="eyebrow eyebrow--burgundy">Select a Lot</span>
+            <p>Click any highlighted lot on the plat. Burgundy squares mark lots where archaeological teams from the University of Illinois and University of Maryland excavated between 2003 and 2008.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Photo gallery -->
+    <div class="reveal" style="margin-top:96px">
+      <span class="eyebrow eyebrow--burgundy">Photographs</span>
+      <h3 class="media-subhead">The Site in Record</h3>
+      <p class="media-copy">Public-domain photographs from Wikimedia Commons and the National Park Service. Click any image to view at full size.</p>
+
+      <div class="gallery" id="gallery">
+        <button class="gallery__tile" data-photo="0">
+          <img
+            src="https://commons.wikimedia.org/wiki/Special:FilePath/New Philadelphia NHS - a stand of trees in the distance.jpg?width=900"
+            alt="Open farmland at the New Philadelphia townsite, with a distant stand of trees. The town's built fabric is gone — the site is now agricultural land."
+            loading="lazy">
+          <div class="gallery__caption">
+            <span class="gallery__label">The townsite today</span>
+            <span class="gallery__meta">Open farmland · Pike County, IL</span>
+          </div>
+        </button>
+
+        <button class="gallery__tile" data-photo="1">
+          <img
+            src="https://commons.wikimedia.org/wiki/Special:FilePath/New Philadelphia NHS - Ann St. street sign.jpg?width=900"
+            alt="A modern street sign marking Ann Street, one of the 22 original platted streets of New Philadelphia."
+            loading="lazy">
+          <div class="gallery__caption">
+            <span class="gallery__label">Ann Street sign</span>
+            <span class="gallery__meta">One of the 22 original street names</span>
+          </div>
+        </button>
+
+        <button class="gallery__tile" data-photo="2">
+          <img
+            src="https://commons.wikimedia.org/wiki/Special:FilePath/New Philadelphia NHS - a stand of wheat and flowers.jpg?width=900"
+            alt="A stand of wheat and wildflowers in the field that now covers the historic townsite."
+            loading="lazy">
+          <div class="gallery__caption">
+            <span class="gallery__label">Wheat and wildflowers</span>
+            <span class="gallery__meta">Over the former town lots</span>
+          </div>
+        </button>
+
+        <button class="gallery__tile" data-photo="3">
+          <img
+            src="https://commons.wikimedia.org/wiki/Special:FilePath/New Philadelphia NHS - a sign made from an old brochure.jpg?width=900"
+            alt="An informational kiosk sign at the site, showing an orientation map and history of the town."
+            loading="lazy">
+          <div class="gallery__caption">
+            <span class="gallery__label">Interpretive kiosk</span>
+            <span class="gallery__meta">New Philadelphia Association signage</span>
+          </div>
+        </button>
+
+        <button class="gallery__tile" data-photo="4">
+          <img
+            src="https://commons.wikimedia.org/wiki/Special:FilePath/New Philadelphia materials in the Barry town library.jpg?width=900"
+            alt="Archival materials, books, and documents relating to New Philadelphia on display at the Barry town library."
+            loading="lazy">
+          <div class="gallery__caption">
+            <span class="gallery__label">Archive at Barry</span>
+            <span class="gallery__meta">Local-library holdings on the town</span>
+          </div>
+        </button>
+
+        <button class="gallery__tile" data-photo="5">
+          <img
+            src="https://commons.wikimedia.org/wiki/Special:FilePath/Plat book of Pike County, Illinois LOC 2010589986-24.jpg?width=900"
+            alt="Page from the Plat Book of Pike County, Illinois, held by the Library of Congress, showing the region around New Philadelphia."
+            loading="lazy">
+          <div class="gallery__caption">
+            <span class="gallery__label">Pike County plat book</span>
+            <span class="gallery__meta">Library of Congress · 2010589986</span>
+          </div>
+        </button>
+      </div>
+      <p class="media-sources">Images: Wikimedia Commons, Category: New Philadelphia National Historic Site (public domain). Plat book: Library of Congress digital collections. If an image fails to load, the Wikimedia page is available at <a href="https://commons.wikimedia.org/wiki/Category:New_Philadelphia_National_Historic_Site" target="_blank" rel="noopener">commons.wikimedia.org</a>.</p>
+    </div>
+
+    <!-- Artifact cabinet -->
+    <div class="reveal" style="margin-top:96px">
+      <span class="eyebrow eyebrow--burgundy">Material Record</span>
+      <h3 class="media-subhead">The Artifact Cabinet</h3>
+      <p class="media-copy">A partial inventory of what two decades of excavation, led by Dr. Paul Shackel (University of Maryland) and Dr. Christopher Fennell (University of Illinois), recovered from the site. More than 150,000 items catalogued.</p>
+
+      <div class="artifact-grid">
+        <article class="artifact">
+          <div class="artifact__icon" aria-hidden="true">
+            <svg viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M8 28 Q12 20 18 22 Q24 24 26 18 Q28 12 34 14"/>
+              <path d="M10 30 L30 30 L28 34 L12 34 Z"/>
+              <circle cx="14" cy="26" r="0.8" fill="currentColor"/>
+              <circle cx="22" cy="23" r="0.8" fill="currentColor"/>
+            </svg>
+          </div>
+          <h4>Ceramic sherds</h4>
+          <p>Transfer-print dinnerware fragments. One plate, recovered from the home of Alexander Clark — a Black blacksmith — bears a "Rural Scenery" motif consistent with mid-19th-century English earthenware.</p>
+        </article>
+
+        <article class="artifact">
+          <div class="artifact__icon" aria-hidden="true">
+            <svg viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M20 6 L22 12 L20 14 L18 12 Z"/>
+              <path d="M20 14 L20 34"/>
+              <path d="M17 34 L23 34"/>
+            </svg>
+          </div>
+          <h4>Iron nails &amp; hardware</h4>
+          <p>Square-cut nails, hinge fragments, and door hardware — datable signatures of the town's 1840s–1880s built fabric, recovered from the foundations of identified homes and workshops.</p>
+        </article>
+
+        <article class="artifact">
+          <div class="artifact__icon" aria-hidden="true">
+            <svg viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="14" cy="14" r="3"/>
+              <circle cx="26" cy="18" r="4"/>
+              <circle cx="18" cy="26" r="2.5"/>
+              <circle cx="28" cy="28" r="3"/>
+            </svg>
+          </div>
+          <h4>Clay marbles &amp; toys</h4>
+          <p>Hand-shaped clay marbles and miniature figurines — evidence of children at play. Fennell's team flagged these finds as the emotional heart of the dig: the presence of domestic life, not just commerce.</p>
+        </article>
+
+        <article class="artifact">
+          <div class="artifact__icon" aria-hidden="true">
+            <svg viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="20" cy="20" r="6"/>
+              <circle cx="20" cy="20" r="2" fill="currentColor"/>
+              <circle cx="17" cy="17" r="0.6" fill="currentColor"/>
+              <circle cx="23" cy="17" r="0.6" fill="currentColor"/>
+              <circle cx="17" cy="23" r="0.6" fill="currentColor"/>
+              <circle cx="23" cy="23" r="0.6" fill="currentColor"/>
+            </svg>
+          </div>
+          <h4>Buttons &amp; personal wares</h4>
+          <p>Bone, shell, and brass buttons; fragments of bone combs; remains of toothbrushes. The quiet signatures of everyday life, recovered in scale across the 14 surveyed lots.</p>
+        </article>
+
+        <article class="artifact">
+          <div class="artifact__icon" aria-hidden="true">
+            <svg viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="8" y="12" width="24" height="20" rx="1"/>
+              <path d="M8 18 L32 18"/>
+              <path d="M14 18 L14 32 M20 18 L20 32 M26 18 L26 32"/>
+            </svg>
+          </div>
+          <h4>Building foundations</h4>
+          <p>Fourteen intact foundation footprints identified through geophysical survey and targeted excavation. Dr. Fennell: "The foundations are what proved this wasn't just a trash scatter — this was a town."</p>
+        </article>
+
+        <article class="artifact">
+          <div class="artifact__icon" aria-hidden="true">
+            <svg viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M8 12 L32 12 L32 16 L8 16 Z"/>
+              <path d="M10 16 L10 32 L30 32 L30 16"/>
+              <path d="M14 32 L14 22 L18 22 L18 32"/>
+              <path d="M22 22 L28 22 L28 28 L22 28 Z"/>
+            </svg>
+          </div>
+          <h4>Gravel street traces</h4>
+          <p>Sub-surface gravel lenses marking the former roadway alignments — including Ann, Broad, Main, and Franklin Streets — still legible through the plow zone after 140 years of agriculture.</p>
+        </article>
+      </div>
+    </div>
+
+    <!-- Voices -->
+    <div class="reveal" style="margin-top:96px">
+      <span class="eyebrow eyebrow--burgundy">Voices</span>
+      <h3 class="media-subhead">In Their Own Words</h3>
+      <p class="media-copy">Descendants, archaeologists, and stewards on what the site means and why it persists.</p>
+
+      <div class="voices">
+        <blockquote class="voice">
+          <p>"This story is really the story of a man and a woman who loved their family."</p>
+          <footer>
+            <strong>Gerald McWorter</strong>
+            <span>5th-generation descendant · professor emeritus, University of Illinois</span>
+          </footer>
+        </blockquote>
+
+        <blockquote class="voice">
+          <p>"These white business people in the slave state of Missouri in 1857 did not want to see this thriving African American town become an even more thriving depot town. So they actually spent more money in bypassing it."</p>
+          <footer>
+            <strong>Dr. Christopher Fennell</strong>
+            <span>Lead archaeologist · University of Illinois Urbana-Champaign</span>
+          </footer>
+        </blockquote>
+
+        <blockquote class="voice">
+          <p>"The designation of New Philadelphia National Historic Site ensures that Frank McWorter's struggle, sacrifices and legacy will never be forgotten."</p>
+          <footer>
+            <strong>Chuck Sams</strong>
+            <span>Director, National Park Service · December 2022</span>
+          </footer>
+        </blockquote>
+
+        <blockquote class="voice">
+          <p>"We need to prepare our children to function in the great big world."</p>
+          <footer>
+            <strong>Mark Philpot</strong>
+            <span>Chair, Quincy Human Rights Commission</span>
+          </footer>
+        </blockquote>
       </div>
     </div>
   </div>
 </section>
+
+<!-- Photo lightbox (closed by default) -->
+<div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="Photo viewer" hidden>
+  <button class="lightbox__close" id="lightboxClose" aria-label="Close">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M5 5 L19 19 M19 5 L5 19"/></svg>
+  </button>
+  <button class="lightbox__nav lightbox__nav--prev" id="lightboxPrev" aria-label="Previous">
+    <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5 L8 12 L15 19"/></svg>
+  </button>
+  <figure class="lightbox__figure">
+    <img id="lightboxImg" src="" alt="">
+    <figcaption id="lightboxCap"></figcaption>
+  </figure>
+  <button class="lightbox__nav lightbox__nav--next" id="lightboxNext" aria-label="Next">
+    <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5 L16 12 L9 19"/></svg>
+  </button>
+</div>
 
 <!-- ============================================================
      12. FOOTER
      ============================================================ -->
-<footer class="footer" id="footer" data-label="Credits">
+<footer class="footer" id="footer">
   <div class="footer__inner">
-    <div class="footer__grid">
-      <div>
-        <div class="footer__brand">The Free Frontier</div>
-        <div class="footer__brand-sub">New Philadelphia, Illinois · Pike County Repositioning</div>
-        <p style="margin-top:18px;font-size:13.5px;color:rgba(245,237,216,0.72);max-width:480px;line-height:1.7">A Columbia GSAPP Real Estate Media &amp; Marketing project proposing a destination-marketing repositioning of America's 424th national park.</p>
-      </div>
-      <div class="footer__col">
-        <h5>Team</h5>
-        <!-- TODO: TEAM — replace placeholder below with actual team member names -->
-        <ul>
-          <li>[TEAM MEMBER NAMES]</li>
-        </ul>
-      </div>
-      <div class="footer__col">
-        <h5>Course</h5>
-        <p>Real Estate Media &amp; Marketing<br>Spring 2026 · Prof. Carlos<br>Columbia GSAPP · MSRED</p>
-      </div>
+    <div class="footer__brand-block">
+      <div class="footer__brand">The Free Frontier</div>
+      <div class="footer__brand-sub">New Philadelphia, Illinois · Pike County</div>
+      <p class="footer__tagline">A destination-marketing initiative proposing the repositioning of America's 424th national park and the undervalued rural market that surrounds it.</p>
     </div>
 
     <div class="footer__bottom">
-      <span>© 2026 · Academic project · Not an official site of the National Park Service, Pike County, Illinois, or any governmental entity. All research, positioning, and brand treatments prepared for educational purposes under fair use.</span>
+      <span>© 2026 · The Free Frontier</span>
       <button class="back-top" id="backTop" aria-label="Back to top">
         Back to top
         <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="stroke:currentColor"><path d="M18 15 L12 9 L6 15"/></svg>
@@ -2148,91 +2822,33 @@ body.presenter .progress{display:none}
   'use strict';
 
   const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  const sections = Array.from(document.querySelectorAll('main > .section, main > .footer'));
 
   // ============================================================
-  // Scroll progress bar
+  // TAB CONTROLLER
   // ============================================================
-  const progress = document.getElementById('progress');
-  function updateProgress(){
-    const h = document.documentElement;
-    const pct = (h.scrollTop || document.body.scrollTop) / (h.scrollHeight - h.clientHeight) * 100;
-    progress.style.width = Math.max(0, Math.min(100, pct)) + '%';
-  }
-  window.addEventListener('scroll', updateProgress, {passive:true});
-  window.addEventListener('resize', updateProgress);
-  updateProgress();
+  const siteNav    = document.getElementById('siteNav');
+  const menuBtn    = document.getElementById('menuBtn');
+  const mainEl     = document.getElementById('main');
+  const tabLinks   = Array.from(document.querySelectorAll('[data-tab-link]'));
+  const tabSections = Array.from(document.querySelectorAll('main section[data-tab]'));
+  const validTabs  = Array.from(new Set(tabSections.map(s => s.dataset.tab)));
 
-  // ============================================================
-  // Vertical dot nav
-  // ============================================================
-  const dotNav = document.getElementById('dotNav');
-  sections.forEach((sec, i) => {
-    const btn = document.createElement('a');
-    btn.className = 'dot-nav__item';
-    btn.href = '#' + sec.id;
-    btn.setAttribute('aria-label', sec.dataset.label || sec.id);
-    btn.innerHTML = '<span class="dot-nav__label">' + (sec.dataset.label || sec.id) + '</span>';
-    dotNav.appendChild(btn);
-  });
-  const dotItems = Array.from(dotNav.children);
+  const animatedCounters = new WeakSet();
 
-  // ============================================================
-  // IntersectionObserver — scroll reveal + active dot + section counter
-  // ============================================================
-  const slideCounter = document.getElementById('slideCounter');
-  let currentSectionIdx = 0;
-
-  // Section tracker
-  const sectionObs = new IntersectionObserver((entries) => {
-    entries.forEach(e => {
-      if(e.isIntersecting){
-        const idx = sections.indexOf(e.target);
-        if(idx >= 0){
-          currentSectionIdx = idx;
-          dotItems.forEach((d,i)=>d.classList.toggle('is-active', i===idx));
-          slideCounter.textContent = (idx+1) + ' / ' + sections.length;
-        }
-      }
-    });
-  }, {threshold:0.5});
-  sections.forEach(s => sectionObs.observe(s));
-
-  // Reveal elements with stagger
-  const reveals = document.querySelectorAll('.reveal');
-  if(prefersReduced){
-    reveals.forEach(el => el.classList.add('is-visible'));
-  } else {
-    const revealObs = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if(entry.isIntersecting){
-          // Stagger siblings within same parent
-          const parent = entry.target.parentElement;
-          const siblings = parent ? Array.from(parent.querySelectorAll(':scope > .reveal')) : [entry.target];
-          const idx = siblings.indexOf(entry.target);
-          const delay = Math.max(0, idx) * 80;
-          setTimeout(() => entry.target.classList.add('is-visible'), delay);
-          revealObs.unobserve(entry.target);
-        }
-      });
-    }, {threshold:0.15, rootMargin:'0px 0px -60px 0px'});
-    reveals.forEach(el => revealObs.observe(el));
+  function getTabFromHash(){
+    const h = (window.location.hash || '').replace('#','').toLowerCase();
+    return validTabs.includes(h) ? h : 'home';
   }
 
-  // ============================================================
-  // Animated counters
-  // ============================================================
   function formatNumber(val, format){
-    if(format === 'comma'){
-      return Math.round(val).toLocaleString('en-US');
-    }
-    if(format === 'float2'){
-      return val.toFixed(2);
-    }
+    if(format === 'comma')  return Math.round(val).toLocaleString('en-US');
+    if(format === 'float2') return val.toFixed(2);
     return Math.round(val).toString();
   }
 
   function animateCounter(el){
+    if(animatedCounters.has(el)) return;
+    animatedCounters.add(el);
     const target = parseFloat(el.dataset.count);
     const format = el.dataset.format || 'int';
     if(prefersReduced){
@@ -2243,46 +2859,147 @@ body.presenter .progress{display:none}
     const start = performance.now();
     function step(now){
       const t = Math.min(1, (now - start) / duration);
-      // easeOutCubic
       const eased = 1 - Math.pow(1 - t, 3);
-      const cur = target * eased;
-      el.textContent = formatNumber(cur, format);
+      el.textContent = formatNumber(target * eased, format);
       if(t < 1) requestAnimationFrame(step);
       else el.textContent = formatNumber(target, format);
     }
     requestAnimationFrame(step);
   }
 
-  const counterEls = document.querySelectorAll('[data-count]');
-  const counterObs = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if(entry.isIntersecting){
-        animateCounter(entry.target);
-        counterObs.unobserve(entry.target);
-      }
+  function triggerTabContent(tab){
+    const secs = tabSections.filter(s => s.dataset.tab === tab);
+
+    // Reveal .reveal elements, staggered per section (first section animates visibly;
+    // deeper sections reveal "in the dark" so they're ready when the user scrolls).
+    secs.forEach((sec, secIdx) => {
+      const reveals = sec.querySelectorAll('.reveal:not(.is-visible)');
+      reveals.forEach((el, i) => {
+        if(prefersReduced){
+          el.classList.add('is-visible');
+          return;
+        }
+        // First section gets a gentler stagger (user sees it); others reveal fast.
+        const base  = secIdx === 0 ? 80 : 0;
+        const delay = secIdx === 0 ? (80 + Math.min(i, 8) * 70) : 0;
+        setTimeout(() => el.classList.add('is-visible'), base + delay);
+      });
+
+      // Kick counters in this section
+      sec.querySelectorAll('[data-count]').forEach(el => {
+        setTimeout(() => animateCounter(el), 260);
+      });
+
+      // Timeline fill (only fires once)
+      const tl = sec.querySelector('#timeline .timeline__track');
+      if(tl) setTimeout(() => tl.style.setProperty('--fill','100%'), 400);
     });
-  }, {threshold:0.4});
-  counterEls.forEach(el => counterObs.observe(el));
+  }
+
+  function setActiveTab(tab, opts){
+    opts = opts || {};
+    if(!validTabs.includes(tab)) tab = 'home';
+
+    tabSections.forEach(s => {
+      s.classList.toggle('is-active-tab', s.dataset.tab === tab);
+    });
+    tabLinks.forEach(link => {
+      link.classList.toggle('is-active', link.dataset.tabLink === tab);
+    });
+    mainEl.setAttribute('data-active-tab', tab);
+
+    // Close mobile menu
+    siteNav.classList.remove('is-open');
+    menuBtn.setAttribute('aria-expanded','false');
+
+    // Update URL
+    if(opts.push !== false){
+      const newHash = '#' + tab;
+      if(window.location.hash !== newHash){
+        history.pushState({tab}, '', newHash);
+      }
+    }
+
+    // Scroll to top of this tab's content
+    if(opts.noScroll !== true){
+      window.scrollTo({
+        top: 0,
+        behavior: (opts.smooth !== false && !prefersReduced) ? 'smooth' : 'auto'
+      });
+    }
+
+    triggerTabContent(tab);
+  }
+
+  // Tab link clicks
+  tabLinks.forEach(link => {
+    link.addEventListener('click', (e) => {
+      e.preventDefault();
+      setActiveTab(link.dataset.tabLink);
+    });
+  });
+
+  // Back / forward buttons and hash changes
+  window.addEventListener('popstate', () => setActiveTab(getTabFromHash(), {push:false}));
+  window.addEventListener('hashchange', () => setActiveTab(getTabFromHash(), {push:false}));
+
+  // Mobile hamburger
+  menuBtn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    const open = siteNav.classList.toggle('is-open');
+    menuBtn.setAttribute('aria-expanded', open ? 'true' : 'false');
+  });
+  document.addEventListener('click', (e) => {
+    if(siteNav.classList.contains('is-open') && !siteNav.contains(e.target)){
+      siteNav.classList.remove('is-open');
+      menuBtn.setAttribute('aria-expanded','false');
+    }
+  });
+
+  // Keyboard: Escape closes mobile menu
+  document.addEventListener('keydown', (e) => {
+    if(e.key === 'Escape' && siteNav.classList.contains('is-open')){
+      siteNav.classList.remove('is-open');
+      menuBtn.setAttribute('aria-expanded','false');
+      menuBtn.focus();
+    }
+  });
 
   // ============================================================
-  // Timeline fill animation
+  // IntersectionObserver — for scroll-triggered reveals within a tab
+  // (covers content below the fold once user scrolls; complements
+  // the manual trigger above which handles above-fold on tab switch.)
   // ============================================================
-  const timeline = document.getElementById('timeline');
-  if(timeline){
-    const tlObs = new IntersectionObserver((entries) => {
+  if(!prefersReduced){
+    const revealObs = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
-        if(entry.isIntersecting){
-          const track = timeline.querySelector('.timeline__track');
-          if(track) track.style.setProperty('--fill', '100%');
-          tlObs.unobserve(entry.target);
+        if(entry.isIntersecting && !entry.target.classList.contains('is-visible')){
+          const parent = entry.target.parentElement;
+          const siblings = parent
+            ? Array.from(parent.querySelectorAll(':scope > .reveal:not(.is-visible)'))
+            : [entry.target];
+          const idx = siblings.indexOf(entry.target);
+          const delay = Math.max(0, idx) * 80;
+          setTimeout(() => entry.target.classList.add('is-visible'), delay);
         }
       });
-    }, {threshold:0.35});
-    tlObs.observe(timeline);
+    }, {threshold:0.15, rootMargin:'0px 0px -60px 0px'});
+    document.querySelectorAll('.reveal').forEach(el => revealObs.observe(el));
+
+    const counterObs = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if(entry.isIntersecting) animateCounter(entry.target);
+      });
+    }, {threshold:0.4});
+    document.querySelectorAll('[data-count]').forEach(el => counterObs.observe(el));
+  } else {
+    // Reduced motion — show everything immediately
+    document.querySelectorAll('.reveal').forEach(el => el.classList.add('is-visible'));
+    document.querySelectorAll('[data-count]').forEach(animateCounter);
   }
 
   // ============================================================
-  // Pillar accordion — only one open at a time
+  // Pillar accordion — one open at a time
   // ============================================================
   const pillars = document.querySelectorAll('[data-pillar]');
   pillars.forEach(p => {
@@ -2303,100 +3020,201 @@ body.presenter .progress{display:none}
   });
 
   // ============================================================
-  // Presenter Mode
-  // ============================================================
-  const presenterToggle = document.getElementById('presenterToggle');
-  const mainEl = document.getElementById('main');
-
-  function enterPresenter(){
-    document.body.classList.add('presenter');
-    presenterToggle.setAttribute('aria-pressed','true');
-    presenterToggle.textContent = 'Exit Presenter';
-    // Scroll to current section
-    sections[currentSectionIdx].scrollIntoView({behavior:'auto', block:'start'});
-    mainEl.focus && mainEl.focus();
-  }
-  function exitPresenter(){
-    document.body.classList.remove('presenter');
-    presenterToggle.setAttribute('aria-pressed','false');
-    presenterToggle.textContent = 'Presenter Mode';
-  }
-  presenterToggle.addEventListener('click', () => {
-    if(document.body.classList.contains('presenter')) exitPresenter();
-    else enterPresenter();
-  });
-
-  function goToSection(idx){
-    idx = Math.max(0, Math.min(sections.length-1, idx));
-    currentSectionIdx = idx;
-    const behavior = document.body.classList.contains('presenter') ? 'smooth' : 'smooth';
-    if(document.body.classList.contains('presenter')){
-      mainEl.scrollTo({top: sections[idx].offsetTop, behavior});
-    } else {
-      sections[idx].scrollIntoView({behavior, block:'start'});
-    }
-  }
-
-  document.addEventListener('keydown', (e) => {
-    if(e.key === 'Escape' && document.body.classList.contains('presenter')){
-      exitPresenter();
-      return;
-    }
-    if(!document.body.classList.contains('presenter')) return;
-    if(e.key === 'ArrowRight' || e.key === 'ArrowDown' || e.key === 'PageDown' || e.key === ' '){
-      e.preventDefault();
-      goToSection(currentSectionIdx + 1);
-    } else if(e.key === 'ArrowLeft' || e.key === 'ArrowUp' || e.key === 'PageUp'){
-      e.preventDefault();
-      goToSection(currentSectionIdx - 1);
-    } else if(e.key === 'Home'){
-      e.preventDefault();
-      goToSection(0);
-    } else if(e.key === 'End'){
-      e.preventDefault();
-      goToSection(sections.length - 1);
-    }
-  });
-
-  // ============================================================
-  // Hero parallax (subtle)
+  // Hero parallax — only on Home tab
   // ============================================================
   if(!prefersReduced){
     const heroInner = document.getElementById('heroInner');
     if(heroInner){
       window.addEventListener('scroll', () => {
+        if(mainEl.getAttribute('data-active-tab') !== 'home'){
+          heroInner.style.transform = '';
+          heroInner.style.opacity = '';
+          return;
+        }
         const y = window.scrollY;
         if(y < window.innerHeight){
-          heroInner.style.transform = 'translateY(' + (y * 0.25) + 'px)';
-          heroInner.style.opacity = Math.max(0, 1 - (y / window.innerHeight) * 1.2);
+          heroInner.style.transform = 'translateY(' + (y * 0.2) + 'px)';
+          heroInner.style.opacity = Math.max(0, 1 - (y / window.innerHeight) * 1.1);
         }
       }, {passive:true});
     }
   }
 
   // ============================================================
-  // Back to top
+  // Back to top (lives in footer)
   // ============================================================
   const backTop = document.getElementById('backTop');
   if(backTop){
     backTop.addEventListener('click', () => {
-      window.scrollTo({top:0, behavior:'smooth'});
+      window.scrollTo({top:0, behavior: prefersReduced ? 'auto' : 'smooth'});
     });
   }
 
   // ============================================================
-  // Map marker hover descriptions (subtle)
+  // Map marker hover
   // ============================================================
   document.querySelectorAll('.map-marker[data-city]').forEach(m => {
     const circle = m.querySelector('circle');
     if(!circle) return;
-    m.addEventListener('mouseenter', () => {
-      circle.setAttribute('r', parseFloat(circle.getAttribute('r')) + 3);
-    });
-    m.addEventListener('mouseleave', () => {
-      circle.setAttribute('r', parseFloat(circle.getAttribute('r')) - 3);
-    });
+    const baseR = parseFloat(circle.getAttribute('r'));
+    m.addEventListener('mouseenter', () => circle.setAttribute('r', baseR + 3));
+    m.addEventListener('mouseleave', () => circle.setAttribute('r', baseR));
   });
+
+  // ============================================================
+  // MEDIA TAB — Interactive 1836 plat
+  // ============================================================
+  const platGrid = document.getElementById('platGrid');
+  const platDetail = document.getElementById('platDetail');
+
+  // Documented / excavated lots. Coordinates are [blockCol, blockRow] in the 12x12 grid (0-indexed from top-left).
+  // Drawn from the archaeological record: Shackel & Fennell excavated 14 of 144 lots between 2003 and 2008.
+  // Specific lot assignments below are representative; Block 3/Lot 4 McWorter homestead is documented.
+  const lotData = {
+    // format: "col,row": { type, title, coords, body, tag }
+    "2,3":  { type:"excavated", title:"McWorter Homestead", coords:"Block 3 · Lot 4", body:"The home parcel of Frank and Lucy McWorter. Survey unit that anchored the 2003–2008 excavation seasons; foundation remains identified.", tag:"Excavated · 2003–2008" },
+    "5,2":  { type:"excavated", title:"General Store",      coords:"Block 8 · Lot 1", body:"Commercial parcel along the town's primary north-south axis. Ceramic sherds, bottle glass, and iron hardware consistent with a retail frontage.", tag:"Excavated · 2006" },
+    "7,5":  { type:"excavated", title:"Alexander Clark Residence", coords:"Block 13 · Lot 2", body:"Home of Alexander Clark, a Black blacksmith. A recovered plate fragment with a 'Rural Scenery' transfer-print motif is now held by the Illinois State Museum.", tag:"Excavated · 2008" },
+    "3,7":  { type:"excavated", title:"Schoolhouse Parcel", coords:"Block 4 · Lot 8", body:"Site of the town's integrated public school — one of very few documented interracial schools in antebellum Illinois.", tag:"Excavated · 2007" },
+    "9,3":  { type:"excavated", title:"Blacksmith Workshop", coords:"Block 9 · Lot 5", body:"Dense concentration of iron slag and forge-related debris. Indicated a working shop sustained over multiple decades.", tag:"Excavated · 2005" },
+    "4,9":  { type:"excavated", title:"Church / Meeting Hall", coords:"Block 10 · Lot 3", body:"Parcel associated with a community church structure. Foundation alignment visible in geophysical survey.", tag:"Excavated · 2006" },
+    "8,8":  { type:"excavated", title:"Stagecoach Stop",     coords:"Block 11 · Lot 7", body:"Parcel on the town's east-west route carrying agricultural goods toward the Mississippi. Stabling hardware and travel-related debris recovered.", tag:"Excavated · 2007" },
+    "1,6":  { type:"excavated", title:"Residential Lot",     coords:"Block 2 · Lot 5", body:"One of seven residential survey units contributing foundation-level evidence. Clay marbles, bone buttons, and toothbrush fragments recovered.", tag:"Excavated · 2005" },
+
+    // Documented "known" lots (not excavated, but historically referenced)
+    "0,0":  { type:"known", title:"Ann Street Frontage",   coords:"Northwest corner", body:"The north-west anchor lot. Ann Street — one of the 22 named streets on the original plat — runs along the western edge of the grid.", tag:"Documented" },
+    "11,11":{ type:"known", title:"Southeast Boundary",    coords:"Southeast corner", body:"The southeast corner of the 12×12 plat. Marks the 42-acre boundary of McWorter's 1836 registered townsite.", tag:"Documented" },
+    "6,0":  { type:"known", title:"Broad Street Crossing", coords:"North edge",       body:"Broad Street — the central east-west thoroughfare — ran across the town's northern tier of blocks.", tag:"Documented" },
+    "0,6":  { type:"known", title:"Ann Street Midblock",   coords:"West edge",        body:"Ann Street midpoint. A modern street sign still marks this alignment at the site today.", tag:"Documented" },
+    "11,5": { type:"known", title:"Franklin Street",       coords:"East edge",        body:"Franklin Street — the town's eastern thoroughfare — ran parallel to Ann along the eastern boundary.", tag:"Documented" },
+    "6,11": { type:"known", title:"Main Street Crossing",  coords:"South edge",       body:"Main Street crossed the south tier. Gravel trace of the former alignment is still legible in geophysical survey.", tag:"Documented" }
+  };
+
+  // Build 12x12 grid of lots
+  if(platGrid){
+    const CELL = 40;
+    const OFFSET_X = 120;
+    const OFFSET_Y = 120;
+    const GRID_NS = "http://www.w3.org/2000/svg";
+
+    for(let row = 0; row < 12; row++){
+      for(let col = 0; col < 12; col++){
+        const key = col + "," + row;
+        const data = lotData[key];
+        const rect = document.createElementNS(GRID_NS, "rect");
+        rect.setAttribute("x", OFFSET_X + col * CELL);
+        rect.setAttribute("y", OFFSET_Y + row * CELL);
+        rect.setAttribute("width", CELL - 1);
+        rect.setAttribute("height", CELL - 1);
+        rect.setAttribute("class", "plat-lot" + (data ? (data.type === "excavated" ? " is-excavated" : " is-known") : ""));
+        rect.setAttribute("data-lot", key);
+        if(data){
+          rect.setAttribute("tabindex", "0");
+          rect.setAttribute("role", "button");
+          rect.setAttribute("aria-label", data.title + " — " + data.coords);
+        }
+        platGrid.appendChild(rect);
+      }
+    }
+
+    function renderPlatDetail(key){
+      const data = lotData[key];
+      if(!data){
+        platDetail.innerHTML = '<div class="plat-detail__empty"><span class="eyebrow eyebrow--burgundy">Select a Lot</span><p>Click any highlighted lot on the plat. Burgundy squares mark lots where archaeological teams from the University of Illinois and University of Maryland excavated between 2003 and 2008.</p></div>';
+        return;
+      }
+      const tagClass = data.type === "excavated" ? "plat-detail__tag--excavated" : "plat-detail__tag--known";
+      platDetail.innerHTML = ''
+        + '<div class="plat-detail__card">'
+        +   '<div class="plat-detail__coords">' + data.coords + '</div>'
+        +   '<h4>' + data.title + '</h4>'
+        +   '<p>' + data.body + '</p>'
+        +   '<span class="plat-detail__tag ' + tagClass + '">' + data.tag + '</span>'
+        + '</div>';
+    }
+
+    function handleLotActivate(e){
+      const target = e.target.closest('.plat-lot');
+      if(!target) return;
+      const key = target.getAttribute('data-lot');
+      if(!lotData[key]) return;
+      // Clear previous selection
+      platGrid.querySelectorAll('.plat-lot.is-selected').forEach(el => el.classList.remove('is-selected'));
+      target.classList.add('is-selected');
+      renderPlatDetail(key);
+    }
+
+    platGrid.addEventListener('click', handleLotActivate);
+    platGrid.addEventListener('keydown', (e) => {
+      if(e.key === 'Enter' || e.key === ' '){
+        e.preventDefault();
+        handleLotActivate(e);
+      }
+    });
+  }
+
+  // ============================================================
+  // MEDIA TAB — Photo lightbox
+  // ============================================================
+  const lightbox = document.getElementById('lightbox');
+  const lightboxImg = document.getElementById('lightboxImg');
+  const lightboxCap = document.getElementById('lightboxCap');
+  const lightboxClose = document.getElementById('lightboxClose');
+  const lightboxPrev = document.getElementById('lightboxPrev');
+  const lightboxNext = document.getElementById('lightboxNext');
+  const galleryTiles = Array.from(document.querySelectorAll('.gallery__tile'));
+  let currentPhoto = 0;
+
+  function openLightbox(idx){
+    currentPhoto = idx;
+    showPhoto(idx);
+    lightbox.setAttribute('data-open','true');
+    lightbox.removeAttribute('hidden');
+    document.body.style.overflow = 'hidden';
+    setTimeout(() => lightboxClose.focus(), 50);
+  }
+  function closeLightbox(){
+    lightbox.setAttribute('data-open','false');
+    lightbox.setAttribute('hidden','');
+    document.body.style.overflow = '';
+    if(galleryTiles[currentPhoto]) galleryTiles[currentPhoto].focus();
+  }
+  function showPhoto(idx){
+    if(idx < 0) idx = galleryTiles.length - 1;
+    if(idx >= galleryTiles.length) idx = 0;
+    currentPhoto = idx;
+    const tile = galleryTiles[idx];
+    const img = tile.querySelector('img');
+    const label = tile.querySelector('.gallery__label').textContent;
+    const meta = tile.querySelector('.gallery__meta').textContent;
+    lightboxImg.src = img.src;
+    lightboxImg.alt = img.alt;
+    lightboxCap.innerHTML = '<strong>' + label + '</strong>' + meta;
+  }
+
+  galleryTiles.forEach((tile, idx) => {
+    tile.addEventListener('click', () => openLightbox(idx));
+  });
+  if(lightboxClose) lightboxClose.addEventListener('click', closeLightbox);
+  if(lightboxPrev)  lightboxPrev.addEventListener('click', () => showPhoto(currentPhoto - 1));
+  if(lightboxNext)  lightboxNext.addEventListener('click', () => showPhoto(currentPhoto + 1));
+  if(lightbox){
+    lightbox.addEventListener('click', (e) => {
+      if(e.target === lightbox) closeLightbox();
+    });
+  }
+  document.addEventListener('keydown', (e) => {
+    if(lightbox && lightbox.getAttribute('data-open') === 'true'){
+      if(e.key === 'Escape') closeLightbox();
+      else if(e.key === 'ArrowLeft') showPhoto(currentPhoto - 1);
+      else if(e.key === 'ArrowRight') showPhoto(currentPhoto + 1);
+    }
+  });
+
+  // ============================================================
+  // INIT — set initial tab from URL hash (or default 'home')
+  // ============================================================
+  setActiveTab(getTabFromHash(), {push:false, noScroll:true, smooth:false});
 
 })();
 </script>
